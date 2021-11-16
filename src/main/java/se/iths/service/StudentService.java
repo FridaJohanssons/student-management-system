@@ -20,4 +20,8 @@ public class StudentService {
     public List<Student> getAllStudents(){
         return entityManager.createQuery("SELECT s from Student s", Student.class).getResultList();
     }
+
+    public Student findStudent(Long id){
+        return entityManager.find(Student.class, id);
+    }
 }

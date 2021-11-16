@@ -29,4 +29,15 @@ public class StudentRest {
         List<Student> foundStudents = studentService.getAllStudents();
         return Response.ok(foundStudents).build();
     }
+    @Path("{id}")
+    @GET
+    public Response getStudent(@PathParam("id") Long id){
+        Student foundStudent = studentService.findStudent(id);
+        if(foundStudent == null){
+            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
+                    .entity("Student with id " + id  + " was not found in database.")
+                    .type(MediaType.TEXT_PLAIN_TYPE).build());
+        }
+        return Response.ok(foundStudent).build();
+    }
 }
