@@ -20,17 +20,30 @@ public class StudentRest {
     @Path("")
     @POST
     public Response createStudent(Student student){
-        studentService.createStudent(student);
 
+        try{
+            studentService.createStudent(student);
+        }
+        catch (Exception e){
+            throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+                    .entity("You need to create a student with firstName, lastName and email! Please try again")
+                    .type(MediaType.TEXT_PLAIN_TYPE).build());
+        }
         return Response.status(Response.Status.CREATED).entity(student).build();
-
     }
     @Path("")
     @GET
     public Response getAllStudents(){
         List<Student> foundStudents = studentService.getAllStudents();
+
+        if(foundStudents.isEmpty()){
+            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
+                    .entity("The database is empty.")
+                    .type(MediaType.TEXT_PLAIN_TYPE).build());
+        }
         return Response.ok(foundStudents).build();
     }
+
     @Path("{id}")
     @GET
     public Response getStudent(@PathParam("id") Long id){
@@ -47,6 +60,7 @@ public class StudentRest {
     @PATCH
     public Response updateFirstName(@PathParam("id") Long id, @QueryParam("firstName") String firstName){
         Student updateStudent = studentService.updateFirstName(id, firstName);
+
         return Response.ok(updateStudent).build();
     }
 
@@ -55,7 +69,7 @@ public class StudentRest {
     public Response deleteStudent(@PathParam("id") Long id){
         studentService.deleteStudent(id);
         String message = "Student Deleted";
-        return Response.ok(message).build();
+        return Response.ok(message, MediaType.TEXT_PLAIN_TYPE).build();
     }
 
     @Path("getbylastname")
@@ -63,12 +77,13 @@ public class StudentRest {
     public Response getStudentByLastName(@QueryParam("lastName") String lastName){
         List<Student> foundStudents =  studentService.findStudentWithLastName(lastName);
         //Varför funkar if null med id men inte med lastName??
-        if(foundStudents == null){
+        if(foundStudents.isEmpty()){
             throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
                     .entity("Student with lastname " + lastName  + " was not found in database.")
                     .type(MediaType.TEXT_PLAIN_TYPE).build());
         }
-        return Response.ok(foundStudents, MediaType.APPLICATION_JSON).build();
+
+        return Response.ok(foundStudents).build();
     }
 
 
