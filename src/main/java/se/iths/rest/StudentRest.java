@@ -56,7 +56,7 @@ public class StudentRest {
         return Response.ok(foundStudent).build();
     }
 
-    @Path("updatestudent/{id}")
+    @Path("{id}")
     @PATCH
     public Response updateFirstName(@PathParam("id") Long id, @QueryParam("firstName") String firstName){
         Student updateStudent;
