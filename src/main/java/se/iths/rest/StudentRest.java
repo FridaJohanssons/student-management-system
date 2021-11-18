@@ -59,16 +59,27 @@ public class StudentRest {
     @Path("updatestudent/{id}")
     @PATCH
     public Response updateFirstName(@PathParam("id") Long id, @QueryParam("firstName") String firstName){
-        Student updateStudent = studentService.updateFirstName(id, firstName);
-
+        Student updateStudent;
+        try{
+         updateStudent = studentService.updateFirstName(id, firstName);}
+        catch (Exception e){
+            throw new BadRequestException(Response.status(Response.Status.BAD_REQUEST)
+                    .entity("Student with id " + id + " doesn't exist. Try update a Student with a different id!")
+                    .type(MediaType.TEXT_PLAIN_TYPE).build());
+        }
         return Response.ok(updateStudent).build();
     }
 
     @Path("delete/{id}")
     @DELETE
     public Response deleteStudent(@PathParam("id") Long id){
-        studentService.deleteStudent(id);
-        String message = "Student Deleted";
+        try{studentService.deleteStudent(id);}
+        catch (Exception e){
+            throw new BadRequestException(Response.status(Response.Status.BAD_REQUEST)
+                    .entity("Student with id " + id + " doesn't exist. Try delete a Student with a different id!")
+                    .type(MediaType.TEXT_PLAIN_TYPE).build());
+        }
+        String message = "Student Deleted.";
         return Response.ok(message, MediaType.TEXT_PLAIN_TYPE).build();
     }
 
@@ -76,7 +87,6 @@ public class StudentRest {
     @GET
     public Response getStudentByLastName(@QueryParam("lastName") String lastName){
         List<Student> foundStudents =  studentService.findStudentWithLastName(lastName);
-        //Varför funkar if null med id men inte med lastName??
         if(foundStudents.isEmpty()){
             throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
                     .entity("Student with lastname " + lastName  + " was not found in database.")
@@ -89,7 +99,9 @@ public class StudentRest {
 
 
 
-    //Fråga till Pontus: Om man gör patch varför kan man inte uppdatera en del av metoden när man
+    //Frågor till Pontus:
+    //
+    // Om man gör patch varför kan man inte uppdatera en del av metoden när man
     //har alla värden i samma metod för att uppdatera?  Måste man göra en för varje värde man vill uppdatera
     //eller kan man skriva logik som gör att man kan uppdatera en itaget?
 /*    @Path("updateStudent/{id}")
@@ -101,9 +113,5 @@ public class StudentRest {
         return Response.ok(updateStudent).build();
     }*/
 
-    //Varför funkar inte min try catch?
-/*            catch (BadRequestException e){
-        throw new BadRequestException(Response.status(Response.Status.BAD_REQUEST)
-                .entity("You need to put in studens first name")
-                .type(MediaType.TEXT_PLAIN_TYPE).build());*/
+    //Varför ska felmeddelanden returneras i JSON??
 }
