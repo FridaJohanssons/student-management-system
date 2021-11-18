@@ -17,3 +17,60 @@ lösa.
 
 PROJEKT BESKRIVNING:
 ....
+INSOMNIA TEST
+
+First the database is empty. If you try to get all you get the message. The db is empty.
+
+POST CreateStudent:
+You create a Student with this JSON format. And this http address.
+
+All fields except phoneNumber are mandatory. If you try to make a student without email or name you
+get 400 bad request and a message.
+The student id is automatically created.
+
+http://localhost:8080/student-management-system/api/v1/students
+
+{
+"firstName": "Student example",
+"lastName": "StudentLastName",
+"email": "student@testmail.com",
+"phoneNumber": "12345"
+}
+
+You should get 201 created if a student is successfully created.
+
+GET GetAllStudents:
+You can now get info of a student by get all students in the db.
+
+http://localhost:8080/student-management-system/api/v1/students
+
+
+GET GetStudentById:
+Or get one student by id. You can search another student by changing the last id number of the http address.
+
+http://localhost:8080/student-management-system/api/v1/students/1
+
+
+GET GetStudentWithLastName:
+Or you can search for students with a specific last name. You write in the Query lastName and the name
+you want to search.
+
+http://localhost:8080/student-management-system/api/v1/students/getbylastname
+
+
+PATCH UpdateStudent:
+You can update students firstName. You can update a different student by changing the last id number
+of the http address. You write in Query firstName and the name you want to update to.
+
+http://localhost:8080/student-management-system/api/v1/students/1
+
+
+DELETE DeleteStudentWithId:
+You can delete a student by changing the last id number of the http address.
+
+http://localhost:8080/student-management-system/api/v1/students/delete/1
+
+
+If you try to get student that don't exist you get 404 not found and a message.
+If you try to delete or update a student that don't exist you get
+400 bad request and a message.
