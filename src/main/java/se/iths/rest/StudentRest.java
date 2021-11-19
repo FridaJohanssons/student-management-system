@@ -27,7 +27,7 @@ public class StudentRest {
         catch (Exception e){
             throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
                     .entity("You need to create a student with firstName, lastName and email! Please try again")
-                    .type(MediaType.TEXT_PLAIN_TYPE).build());
+                    .build());
         }
         return Response.status(Response.Status.CREATED).entity(student).build();
     }
@@ -39,7 +39,7 @@ public class StudentRest {
         if(foundStudents.isEmpty()){
             throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
                     .entity("The database is empty.")
-                    .type(MediaType.TEXT_PLAIN_TYPE).build());
+                    .build());
         }
         return Response.ok(foundStudents).build();
     }
@@ -51,7 +51,7 @@ public class StudentRest {
         if(foundStudent == null){
             throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
                     .entity("Student with id " + id  + " was not found in database.")
-                    .type(MediaType.TEXT_PLAIN_TYPE).build());
+                    .build());
         }
         return Response.ok(foundStudent).build();
     }
@@ -65,7 +65,7 @@ public class StudentRest {
         catch (Exception e){
             throw new BadRequestException(Response.status(Response.Status.BAD_REQUEST)
                     .entity("Student with id " + id + " doesn't exist. Try update a Student with a different id!")
-                    .type(MediaType.TEXT_PLAIN_TYPE).build());
+                    .build());
         }
         return Response.ok(updateStudent).build();
     }
@@ -77,10 +77,10 @@ public class StudentRest {
         catch (Exception e){
             throw new BadRequestException(Response.status(Response.Status.BAD_REQUEST)
                     .entity("Student with id " + id + " doesn't exist. Try delete a Student with a different id!")
-                    .type(MediaType.TEXT_PLAIN_TYPE).build());
+                    .build());
         }
         String message = "Student Deleted.";
-        return Response.ok(message, MediaType.TEXT_PLAIN_TYPE).build();
+        return Response.ok(message).build();
     }
 
     @Path("getbylastname")
@@ -89,8 +89,8 @@ public class StudentRest {
         List<Student> foundStudents =  studentService.findStudentWithLastName(lastName);
         if(foundStudents.isEmpty()){
             throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
-                    .entity("Student with lastname " + lastName  + " was not found in database.")
-                    .type(MediaType.TEXT_PLAIN_TYPE).build());
+                    .entity("Student with lastname " + lastName  + " was not found in database.").
+                    build());
         }
 
         return Response.ok(foundStudents).build();
@@ -109,7 +109,7 @@ public class StudentRest {
     public Response updateStudent(@PathParam("id") Long id, @QueryParam("firstName") String firstName
     , @QueryParam("lastName") String lastName, @QueryParam("email") String email,
                                   @QueryParam("phoneNumber") String phoneNumber){
-        Student updateStudent = studentService.updateStudent(id, firstName, lastName, email, phoneNumber);
+        Student updateStudent = studentService.updateStudent(id, Student);
         return Response.ok(updateStudent).build();
     }*/
 
