@@ -1,7 +1,12 @@
 package se.iths.entity;
 
+import javax.json.bind.annotation.JsonbTransient;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Student {
@@ -16,6 +21,25 @@ public class Student {
     @NotEmpty
     private String email;
     private String phoneNumber;
+
+    @ManyToMany(mappedBy = "students", cascade = CascadeType.ALL)
+
+    private Set<Subject> subjects = new HashSet<>();
+
+    public void addSubject(Subject subject){
+        boolean added = subjects.add(subject);
+        if(added){
+            subject.getStudents().add(this);
+        }
+    }
+
+    public Student(String firstName, String lastName, String email, String phoneNumber) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+    }
+    public Student(){}
 
     public Long getId() {
         return id;
@@ -55,5 +79,14 @@ public class Student {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    @JsonbTransient
+    public Set<Subject> getSubjects() {
+        return subjects;
+    }
+
+    public void setSubjects(Set<Subject> subjects) {
+        this.subjects = subjects;
     }
 }
