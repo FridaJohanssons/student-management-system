@@ -35,17 +35,13 @@ public class SampleDataGenerator {
         teacher2.addSubject(subject2);
         teacher1.addSubject(subject3);
 
-        subject1.addStudent(student1);
-        student1.addSubject(subject1);
-        subject2.addStudent(student1);
-        subject2.addStudent(student2);
-
         student1.addSubject(subject2);
         student2.addSubject(subject1);
         student2.addSubject(subject2);
         student3.addSubject(subject3);
-        student4.addSubject(subject3);
         student3.addSubject(subject1);
+        student4.addSubject(subject3);
+        student4.addSubject(subject2);
 
         entityManager.persist(teacher1);
         entityManager.persist(subject1);
