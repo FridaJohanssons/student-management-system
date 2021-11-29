@@ -1,5 +1,6 @@
 package se.iths.rest;
 
+import se.iths.entity.IdNotFoundException;
 import se.iths.entity.Student;
 import se.iths.service.StudentService;
 
@@ -49,9 +50,7 @@ public class StudentRest {
     public Response getStudent(@PathParam("id") Long id){
         Student foundStudent = studentService.findStudent(id);
         if(foundStudent == null){
-            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
-                    .entity("Student with id " + id  + " was not found in database.")
-                    .build());
+            throw new IdNotFoundException("No student with id: " + id);
         }
         return Response.ok(foundStudent).build();
     }
